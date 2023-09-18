@@ -1,0 +1,39 @@
+.btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+
+.btn-primary {
+    @extend .btn;
+    color: $black-color;
+    background-color: $primary-color;
+
+    &:hover {
+        background-color: black;
+        color: $primary-color;
+        transition: .5s all;
+    }
+}
+
+.disable-button {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 10px 30%;
+    margin: 0 20px;
+}
+
+.action-buttons button i {
+    margin-right: 5px;
+    /* Espaço entre o ícone e o texto */
+}
