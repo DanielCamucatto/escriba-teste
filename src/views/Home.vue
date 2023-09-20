@@ -1,6 +1,11 @@
 <template>
   <div>
     <Navbar />
+    <div class="search-input">
+      <input v-model="filtroBusca" type="text" placeholder="Buscar por nome, ID, CPF ou data de nascimento" />
+      <button @click="filtrarLista">Buscar</button>
+    </div>
+
     <Modal :showModal="modalInternoVisivel" @close="modalInternoVisivel = false">
       <!-- Conteúdo do Modal Interno -->
     </Modal>
@@ -106,6 +111,29 @@ export default {
       cpf: '',
       dataNascimento: '',
     });
+    const filtroBusca = ref('')
+
+    const filtrarLista = () => {
+      const termoBusca = filtroBusca.value.toLowerCase().trim();
+
+      if (termoBusca === '') {
+        // Se o campo de busca estiver vazio, exiba todos os clientes novamente
+        combinarDadosClientes();
+      } else {
+        // Filtrar a lista com base no critério de busca
+        const resultadosFiltrados = todosClientes.value.filter(cliente => {
+          return (
+            cliente.nome.toLowerCase().includes(termoBusca) ||
+            cliente.id.toLowerCase().includes(termoBusca) ||
+            cliente.cpf.toLowerCase().includes(termoBusca) ||
+            cliente.dataNascimento.toLowerCase().includes(termoBusca)
+          );
+        });
+
+        // Atualizar a lista com os resultados filtrados
+        todosClientes.value = resultadosFiltrados;
+      }
+    };
 
     const adicionarClienteModal = () => {
       modalAdicionarVisivel.value = true;
@@ -182,6 +210,11 @@ export default {
     watch(pessoas, () => {
       combinarDadosClientes();
     });
+    watch(filtroBusca, (novoValor) => {
+      if (novoValor === '') {
+        combinarDadosClientes();
+      }
+    });
 
     const removerCliente = (id: string) => {
       const clienteIndex = todosClientes.value.findIndex(cliente => cliente.id === id);
@@ -237,6 +270,8 @@ export default {
       modalEditarVisivel,
       clienteEditando,
       salvarEdicaoCliente,
+      filtroBusca, 
+      filtrarLista,
     };
   },
 };
