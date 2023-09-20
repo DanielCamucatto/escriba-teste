@@ -1,9 +1,9 @@
 <template>
   <div>
     <Navbar />
-    <div class="search-input">
-      <input v-model="filtroBusca" type="text" placeholder="Buscar por nome, ID, CPF ou data de nascimento" />
-      <button @click="filtrarLista">Buscar</button>
+    <div class="search-box">
+      <input class="search-box-input" v-model="filtroBusca" type="text" placeholder="Buscar por cliente" />
+      <button @click="filtrarLista" class="search-box-btn btn-primary">Buscar</button>
     </div>
 
     <Modal :showModal="modalInternoVisivel" @close="modalInternoVisivel = false">

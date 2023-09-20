@@ -1,10 +1,8 @@
 .card-items {
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 100vh;
 }
 
 .person-list {
@@ -17,7 +15,7 @@
     width: 100%;
     max-width: calc(33.33% - 20px);
     margin-bottom: 20px;
-    background-color: #fff;
+    background-color: #f5f5f5;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -32,7 +30,6 @@
 
 .person:hover {
     transform: scale(1.05);
-    /* Efeito de escala ao passar o mouse */
 }
 
 .person-avatar {
@@ -40,7 +37,6 @@
     height: 60px;
     border-radius: 50%;
     background-color: #f0f;
-    /* Aqui você pode adicionar a imagem do avatar */
 }
 
 .person-details {
@@ -74,6 +70,7 @@
     display: flex;
     gap: 10px;
 }
+
 .delete-button {
     background: none;
     border: none;
@@ -91,7 +88,34 @@
     color: $text-color;
     border: none;
     font-size: 1.2rem;
+
     &:hover {
         opacity: .6;
+    }
+}
+
+.search-box {
+    display: block;
+    text-align: center;
+    padding: 20px 0;
+    margin: 40px;
+
+    &-input {
+        border: solid 1px $primary-color;
+        padding: 11px;
+        width: 30%;
+        border-radius: 5px 0 0 5px;
+        @media (max-width: 768px) {
+            width: 70%;
+        }
+    }
+
+    &-btn {
+        width: 10%;
+        border-radius: 0 5px 5px 0;
+        padding: 12px;
+        @media (max-width: 768px) {
+            width: 30%;
+        }
     }
 }
