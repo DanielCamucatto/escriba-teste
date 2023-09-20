@@ -1,12 +1,12 @@
 <template>
   <div>
     <Navbar />
+    <h1 class="title-h1">Lista de clientes</h1>
     <SearchBar :filtroBusca="filtroBusca" @filtrar="filtrarLista" />
 
     <Modal :showModal="modalInternoVisivel" @close="modalInternoVisivel = false">
       <!-- Conteúdo do Modal Interno -->
     </Modal>
-    <!-- Botões de Ação -->
     <div class="action-buttons">
       <button @click="adicionarClienteModal" class="btn-primary">
         <i class="fa fa-plus"></i> Adicionar Cliente
@@ -33,52 +33,63 @@
 
     <!-- Modal de Adicionar Cliente -->
     <Modal :showModal="modalAdicionarVisivel" @close="modalAdicionarVisivel = false">
-      <h2>Adicionar Cliente</h2>
-      <form @submit.prevent="adicionarNovoCliente">
-        <div>
-          <label for="nome">ID:</label>
-          <input v-model="novoCliente.id" type="text" id="id" required>
-        </div>
+      <div class="modal-wrapper">
+        <h2>Adicionar Cliente</h2>
+        <form @submit.prevent="adicionarNovoCliente">
+          <div class="form-group">
+            <label for="nome">ID:</label>
+            <input v-model="novoCliente.id" type="text" id="id" required>
+          </div>
 
-        <div>
-          <label for="nome">Nome:</label>
-          <input v-model="novoCliente.nome" type="text" id="nome" required>
-        </div>
+          <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input v-model="novoCliente.nome" type="text" id="nome" required>
+          </div>
 
-        <div>
-          <label for="cpf">CPF:</label>
-          <input v-model="novoCliente.cpf" type="text" id="cpf" required>
-        </div>
+          <div class="form-group">
+            <label for="cpf">CPF:</label>
+            <input v-model="novoCliente.cpf" type="text" id="cpf" required>
+          </div>
 
-        <div>
-          <label for="dataNascimento">Data de Nascimento:</label>
-          <input v-model="novoCliente.dataNascimento" type="date" id="dataNascimento" required>
-        </div>
+          <div class="form-group">
+            <label for="dataNascimento">Data de Nascimento:</label>
+            <input v-model="novoCliente.dataNascimento" type="date" id="dataNascimento" required>
+          </div>
 
-        <button type="submit" class="btn-primary">Adicionar</button>
-      </form>
+          <div class="button-container">
+            <button type="submit" class="btn-primary">Adicionar</button>
+          </div>
+        </form>
+      </div>
+
     </Modal>
+
     <!-- Modal de Edição de Cliente -->
     <Modal :showModal="modalEditarVisivel" @close="modalEditarVisivel = false">
-      <h2>Editar Cliente</h2>
-      <form @submit.prevent="salvarEdicaoCliente">
-        <div>
-          <label for="editarNome">Nome:</label>
-          <input v-model="clienteEditando.nome" type="text" id="editarNome" required>
-        </div>
+      <div class="modal-wrapper">
+        <h2>Editar Cliente</h2>
+        <form @submit.prevent="salvarEdicaoCliente">
+          <div class="form-group">
+            <label for="editarNome">Nome:</label>
+            <input v-model="clienteEditando.nome" type="text" id="editarNome" required>
+          </div>
 
-        <div>
-          <label for="editarCpf">CPF:</label>
-          <input v-model="clienteEditando.cpf" type="text" id="editarCpf" required>
-        </div>
+          <div class="form-group">
+            <label for="editarCpf">CPF:</label>
+            <input v-model="clienteEditando.cpf" type="text" id="editarCpf" required>
+          </div>
 
-        <div>
-          <label for="editarDataNascimento">Data de Nascimento:</label>
-          <input v-model="clienteEditando.dataNascimento" type="date" id="editarDataNascimento" required>
-        </div>
+          <div class="form-group">
+            <label for="editarDataNascimento">Data de Nascimento:</label>
+            <input v-model="clienteEditando.dataNascimento" type="date" id="editarDataNascimento" required>
+          </div>
 
-        <button type="submit" class="btn-primary">Salvar</button>
-      </form>
+          <div class="button-container">
+            <button type="submit" class="btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+
     </Modal>
   </div>
 </template>

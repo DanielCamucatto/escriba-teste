@@ -43,8 +43,6 @@ export default {
   },
   methods: {
     login() {
-      // Aqui você pode adicionar a lógica de login, por exemplo, enviar os dados para um servidor
-      // e redirecionar o usuário após o login bem-sucedido.
       console.log('Email:', this.email);
       console.log('Password:', this.password);
     },

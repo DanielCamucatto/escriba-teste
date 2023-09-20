@@ -1,6 +1,5 @@
 .modal {
   display: none;
-  /* Certifique-se de que o modal está oculto por padrão */
   position: fixed;
   z-index: 1;
   left: 0;
@@ -9,7 +8,6 @@
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
-  /* Fundo escuro */
 }
 
 .modal-content {
@@ -19,6 +17,20 @@
   border: 1px solid #888;
   width: 50%;
   height: 50%;
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+}
+
+.modal-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  gap: 20px;
+  line-height: 20px;
 }
 
 .close {

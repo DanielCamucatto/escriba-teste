@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 
 const instance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:3000', // Substitua pela URL da sua API
-  timeout: 10000, // Tempo limite da solicitação em milissegundos
+  baseURL: 'http://localhost:3000',
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -10,4 +10,8 @@ const instance: AxiosInstance = axios.create({
 
 export const fetchPessoas = () => {
   return instance.get('/pessoas');
+};
+
+export const fetchProdutos = () => {
+  return instance.get('/produtos');
 };

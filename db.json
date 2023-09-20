@@ -17,17 +17,17 @@
     {
       "id": 1,
       "descricao": "produto 1",
-      "valoUnitario": 10
+      "valorUnitario": 10
     },
     {
       "id": 2,
       "descricao": "produto 2",
-      "valoUnitario": 8.88
+      "valorUnitario": 8.88
     },
     {
+      "id": 4,
       "descricao": "produto 3",
-      "valoUnitario": 10,
-      "id": 4
+      "valorUnitario": 10
     }
   ],
   "pedidos": [

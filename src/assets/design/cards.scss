@@ -32,13 +32,6 @@
     transform: scale(1.05);
 }
 
-.person-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #f0f;
-}
-
 .person-details {
     margin-top: 10px;
 }
@@ -118,4 +111,8 @@
             width: 30%;
         }
     }
+}
+
+.produtos-lista{
+    margin-top: 40px;
 }

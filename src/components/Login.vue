@@ -23,7 +23,7 @@ export default {
     return {
       email: '',
       password: '',
-      isButtonClicked: false, // Adicione esta propriedade
+      isButtonClicked: false, 
     };
   },
   computed: {
@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     login() {
-      this.isButtonClicked = true; // Defina a propriedade como verdadeira quando o botão for clicado.
+      this.isButtonClicked = true; 
       if (!this.isInputEmpty) {
         if (this.isEmailValid && this.isPasswordValid) {
           console.log('Email:', this.email);
