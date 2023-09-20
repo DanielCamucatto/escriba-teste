@@ -1,10 +1,7 @@
 <template>
   <div>
     <Navbar />
-    <div class="search-box">
-      <input class="search-box-input" v-model="filtroBusca" type="text" placeholder="Buscar por cliente" />
-      <button @click="filtrarLista" class="search-box-btn btn-primary">Buscar</button>
-    </div>
+    <SearchBar :filtroBusca="filtroBusca" @filtrar="filtrarLista" />
 
     <Modal :showModal="modalInternoVisivel" @close="modalInternoVisivel = false">
       <!-- Conteúdo do Modal Interno -->
@@ -90,10 +87,12 @@
 import { ref, onMounted, watch } from 'vue';
 import { fetchPessoas } from '../api';
 import Modal from '../components/Modal.vue';
+import SearchBar from '../components/SearchBar.vue';
 
 export default {
   components: {
     Modal,
+    SearchBar
   },
   setup() {
     const modalAdicionarVisivel = ref(false);
@@ -112,28 +111,6 @@ export default {
       dataNascimento: '',
     });
     const filtroBusca = ref('')
-
-    const filtrarLista = () => {
-      const termoBusca = filtroBusca.value.toLowerCase().trim();
-
-      if (termoBusca === '') {
-        // Se o campo de busca estiver vazio, exiba todos os clientes novamente
-        combinarDadosClientes();
-      } else {
-        // Filtrar a lista com base no critério de busca
-        const resultadosFiltrados = todosClientes.value.filter(cliente => {
-          return (
-            cliente.nome.toLowerCase().includes(termoBusca) ||
-            cliente.id.toLowerCase().includes(termoBusca) ||
-            cliente.cpf.toLowerCase().includes(termoBusca) ||
-            cliente.dataNascimento.toLowerCase().includes(termoBusca)
-          );
-        });
-
-        // Atualizar a lista com os resultados filtrados
-        todosClientes.value = resultadosFiltrados;
-      }
-    };
 
     const adicionarClienteModal = () => {
       modalAdicionarVisivel.value = true;
@@ -256,6 +233,26 @@ export default {
       modalEditarVisivel.value = false;
     };
 
+    const filtrarLista = (termoBusca: string) => {
+      if (termoBusca === '') {
+        // Se o campo de busca estiver vazio, exiba todos os clientes novamente
+        combinarDadosClientes();
+      } else {
+        // Filtrar a lista com base no critério de busca
+        const resultadosFiltrados = todosClientes.value.filter(cliente => {
+          return (
+            cliente.nome.toLowerCase().includes(termoBusca) ||
+            cliente.id.toLowerCase().includes(termoBusca) ||
+            cliente.cpf.toLowerCase().includes(termoBusca) ||
+            cliente.dataNascimento.toLowerCase().includes(termoBusca)
+          );
+        });
+
+        // Atualizar a lista com os resultados filtrados
+        todosClientes.value = resultadosFiltrados;
+      }
+    };
+
     return {
       modalAdicionarVisivel,
       novoCliente,
@@ -270,7 +267,7 @@ export default {
       modalEditarVisivel,
       clienteEditando,
       salvarEdicaoCliente,
-      filtroBusca, 
+      filtroBusca,
       filtrarLista,
     };
   },
