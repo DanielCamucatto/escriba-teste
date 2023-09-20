@@ -2,30 +2,30 @@
   <div>
     <Navbar />
     <Modal :showModal="modalInternoVisivel" @close="modalInternoVisivel = false">
-      <div class="modal-content">
-        <h2>Título do Modal Interno</h2>
-        <p>Conteúdo do Modal Interno.</p>
-      </div>
+      <!-- Conteúdo do Modal Interno -->
     </Modal>
-    <!-- Adicione os botões de ação aqui -->
+    <!-- Botões de Ação -->
     <div class="action-buttons">
       <button @click="adicionarClienteModal" class="btn-primary">
         <i class="fa fa-plus"></i> Adicionar Cliente
       </button>
-      <button @click="editarDadosModal" class="btn-primary">
-        <i class="fa fa-edit"></i> Editar Dados do Cliente
-      </button>
     </div>
 
+    <!-- Lista de Clientes -->
     <ul class="card-items">
-      <li v-for="pessoa in pessoas" :key="pessoa.id" class="person">
-        <p class="info-label">ID: {{ pessoa.id }}</p>
-        <p class="person-name">Nome: {{ pessoa.nome }}</p>
-        <p class="info-label">CPF: {{ pessoa.cpf }}</p>
-        <p class="info-label">Data de Nascimento: {{ pessoa.dataNascimento }}</p>
-        <button @click="removerPessoa(pessoa.id)" class="delete-button">
-          <i class="fa fa-trash"></i> <!-- Ícone de lixeira -->
-        </button>
+      <li v-for="cliente in todosClientes" :key="cliente.id" class="person">
+        <p class="info-label">ID: {{ cliente.id }}</p>
+        <p class="person-name">Nome: {{ cliente.nome }}</p>
+        <p class="info-label">CPF: {{ cliente.cpf }}</p>
+        <p class="info-label">Data de Nascimento: {{ cliente.dataNascimento }}</p>
+        <div class="buttons">
+          <button @click="editarCliente(cliente.id)" class="edit-button">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button @click="removerCliente(cliente.id)" class="delete-button">
+            <i class="fa fa-trash"></i>
+          </button>
+        </div>
       </li>
     </ul>
 
@@ -33,6 +33,11 @@
     <Modal :showModal="modalAdicionarVisivel" @close="modalAdicionarVisivel = false">
       <h2>Adicionar Cliente</h2>
       <form @submit.prevent="adicionarNovoCliente">
+        <div>
+          <label for="nome">ID:</label>
+          <input v-model="novoCliente.id" type="text" id="id" required>
+        </div>
+
         <div>
           <label for="nome">Nome:</label>
           <input v-model="novoCliente.nome" type="text" id="nome" required>
@@ -51,12 +56,34 @@
         <button type="submit" class="btn-primary">Adicionar</button>
       </form>
     </Modal>
+    <!-- Modal de Edição de Cliente -->
+    <Modal :showModal="modalEditarVisivel" @close="modalEditarVisivel = false">
+      <h2>Editar Cliente</h2>
+      <form @submit.prevent="salvarEdicaoCliente">
+        <div>
+          <label for="editarNome">Nome:</label>
+          <input v-model="clienteEditando.nome" type="text" id="editarNome" required>
+        </div>
+
+        <div>
+          <label for="editarCpf">CPF:</label>
+          <input v-model="clienteEditando.cpf" type="text" id="editarCpf" required>
+        </div>
+
+        <div>
+          <label for="editarDataNascimento">Data de Nascimento:</label>
+          <input v-model="clienteEditando.dataNascimento" type="date" id="editarDataNascimento" required>
+        </div>
+
+        <button type="submit" class="btn-primary">Salvar</button>
+      </form>
+    </Modal>
   </div>
 </template>
 
 <script lang="ts">
+import { ref, onMounted, watch } from 'vue';
 import { fetchPessoas } from '../api';
-import { ref } from 'vue';
 import Modal from '../components/Modal.vue';
 
 export default {
@@ -64,23 +91,28 @@ export default {
     Modal,
   },
   setup() {
-    const pessoas = ref([] as Array<{ id: number; nome: string; cpf: string; dataNascimento: string }>);
     const modalAdicionarVisivel = ref(false);
     const modalInternoVisivel = ref(false);
-    const novoCliente = ref({ nome: '', cpf: '', dataNascimento: '' });
-
-
-    const removerPessoa = (id: number) => {
-      pessoas.value = pessoas.value.filter(pessoa => pessoa.id !== id);
-    };
+    const novoCliente = ref<{ id: string; nome: string; cpf: string; dataNascimento: string }>({
+      id: '',
+      nome: '',
+      cpf: '',
+      dataNascimento: '',
+    });
+    const modalEditarVisivel = ref(false);
+    const clienteEditando = ref<{ id: string; nome: string; cpf: string; dataNascimento: string }>({
+      id: '',
+      nome: '',
+      cpf: '',
+      dataNascimento: '',
+    });
 
     const adicionarClienteModal = () => {
       modalAdicionarVisivel.value = true;
     };
 
     const editarDadosModal = () => {
-      modalInternoVisivel.value = true; // Abra o modal interno
-      // Você pode adicionar lógica adicional para preencher o modal de edição aqui
+      modalInternoVisivel.value = true;
     };
 
     const fecharModalAdicionar = () => {
@@ -88,56 +120,123 @@ export default {
     };
 
     const adicionarNovoCliente = () => {
-      // Valide os dados do formulário, por exemplo, verificando se estão preenchidos corretamente.
-
-      // Obtenha os dados do novo cliente do ref novoCliente.
       const novoClienteData = {
+        id: novoCliente.value.id,
         nome: novoCliente.value.nome,
         cpf: novoCliente.value.cpf,
         dataNascimento: novoCliente.value.dataNascimento,
       };
 
-      // Armazene os dados do novo cliente no localStorage.
-      localStorage.setItem('novoCliente', JSON.stringify(novoClienteData));
+      const listaClientesJSON = localStorage.getItem('listaClientes');
+      let listaClientes = [];
 
-      // Limpe os campos do formulário ou faça outras ações necessárias.
+      if (listaClientesJSON !== null) {
+        try {
+          listaClientes = JSON.parse(listaClientesJSON);
+        } catch (error) {
+          console.error('Erro ao analisar JSON:', error);
+        }
+      }
 
-      // Adicione o novo cliente à lista de clientes (opcional).
-      // ...
+      listaClientes.push(novoClienteData);
 
-      // Feche o modal de adição.
+      localStorage.setItem('listaClientes', JSON.stringify(listaClientes));
+
+      novoCliente.value = { id: '', nome: '', cpf: '', dataNascimento: '' };
+
       fecharModalAdicionar();
+      combinarDadosClientes();
     };
 
-    const novoClienteDataJSON = localStorage.getItem('novoCliente');
+    const pessoas = ref([] as Array<{ id: number; nome: string; cpf: string; dataNascimento: string }>);
+    const todosClientes = ref([] as Array<{ id: string; nome: string; cpf: string; dataNascimento: string }>);
 
-    if (novoClienteDataJSON !== null) {
-      const novoClienteData = JSON.parse(novoClienteDataJSON);
-      if (typeof novoClienteData === 'object' && novoClienteData !== null) {
-        novoCliente.value.nome = novoClienteData.nome;
-        novoCliente.value.cpf = novoClienteData.cpf;
-        novoCliente.value.dataNascimento = novoClienteData.dataNascimento;
+    const combinarDadosClientes = () => {
+      todosClientes.value = pessoas.value.map(cliente => ({
+        id: cliente.id.toString(),
+        nome: cliente.nome,
+        cpf: cliente.cpf,
+        dataNascimento: cliente.dataNascimento,
+      }));
+
+      const listaClientesJSON = localStorage.getItem('listaClientes');
+
+      if (listaClientesJSON !== null) {
+        const listaClientes = JSON.parse(listaClientesJSON);
+
+        todosClientes.value.push(...listaClientes);
       }
-    }
+    };
 
-    fetchPessoas()
-      .then(response => {
-        pessoas.value = response.data;
-      })
-      .catch(error => {
-        console.error('Erro ao buscar dados:', error);
-      });
+    onMounted(() => {
+      fetchPessoas()
+        .then(response => {
+          pessoas.value = response.data;
+          combinarDadosClientes();
+        })
+        .catch(error => {
+          console.error('Erro ao buscar dados:', error);
+        });
+    });
+
+    watch(pessoas, () => {
+      combinarDadosClientes();
+    });
+
+    const removerCliente = (id: string) => {
+      const clienteIndex = todosClientes.value.findIndex(cliente => cliente.id === id);
+
+      if (clienteIndex !== -1) {
+        todosClientes.value.splice(clienteIndex, 1);
+
+        const listaClientesJSON = localStorage.getItem('listaClientes');
+        if (listaClientesJSON !== null) {
+          const listaClientes = JSON.parse(listaClientesJSON);
+          const novaListaClientes = listaClientes.filter((cliente: { id: string; }) => cliente.id !== id);
+          localStorage.setItem('listaClientes', JSON.stringify(novaListaClientes));
+        }
+      }
+    };
+
+    const editarCliente = (id: string) => {
+      // Encontre o cliente pelo ID
+      const cliente = todosClientes.value.find(cliente => cliente.id === id);
+      if (cliente) {
+        // Preencha os dados do cliente no estado de clienteEditando
+        clienteEditando.value = { ...cliente };
+        // Abra o modal de edição
+        modalEditarVisivel.value = true;
+      }
+    };
+
+    const salvarEdicaoCliente = () => {
+      // Encontre o cliente pelo ID no array de todosClientes
+      const cliente = todosClientes.value.find(cliente => cliente.id === clienteEditando.value.id);
+      if (cliente) {
+        // Atualize os dados do cliente com os dados editados
+        cliente.nome = clienteEditando.value.nome;
+        cliente.cpf = clienteEditando.value.cpf;
+        cliente.dataNascimento = clienteEditando.value.dataNascimento;
+      }
+
+      // Feche o modal de edição
+      modalEditarVisivel.value = false;
+    };
 
     return {
-      pessoas,
       modalAdicionarVisivel,
       novoCliente,
-      removerPessoa,
       adicionarClienteModal,
       fecharModalAdicionar,
       adicionarNovoCliente,
       editarDadosModal,
+      editarCliente,
       modalInternoVisivel,
+      todosClientes,
+      removerCliente,
+      modalEditarVisivel,
+      clienteEditando,
+      salvarEdicaoCliente,
     };
   },
 };

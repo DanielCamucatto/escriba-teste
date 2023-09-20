@@ -16,7 +16,6 @@
 .person {
     width: 100%;
     max-width: calc(33.33% - 20px);
-    /* Define a largura máxima das colunas (3 colunas por linha) */
     margin-bottom: 20px;
     background-color: #fff;
     border-radius: 8px;
@@ -25,6 +24,7 @@
     box-sizing: border-box;
     transition: transform 0.3s ease-in-out;
     position: relative;
+
     @media (max-width: 768px) {
         max-width: calc(100% - 20px);
     }
@@ -39,7 +39,7 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: #f0f0f0;
+    background-color: #f0f;
     /* Aqui você pode adicionar a imagem do avatar */
 }
 
@@ -65,14 +65,33 @@
     color: #333;
 }
 
+.buttons {
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+}
 .delete-button {
     background: none;
     border: none;
     cursor: pointer;
-    color: #ff0000; 
-    font-size: 1.5rem;
-    margin-left: 10px; 
-    position: absolute;
-    top: 40px;
-    right:40px ;
-  }
+    color: $danger-color;
+    font-size: 1.2rem;
+
+    &:hover {
+        opacity: .6;
+    }
+}
+
+.edit-button {
+    background-color: transparent;
+    color: $text-color;
+    border: none;
+    font-size: 1.2rem;
+    &:hover {
+        opacity: .6;
+    }
+}
